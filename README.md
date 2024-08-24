@@ -1,6 +1,6 @@
 # React solitaire
 
-A Quick POC project that I made while having common cold
+A Quick POC project that I made
 
 ## Specs
 

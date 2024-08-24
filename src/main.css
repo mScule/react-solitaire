@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  @apply bg-emerald-800 from-emerald-800 to-emerald-900
+}

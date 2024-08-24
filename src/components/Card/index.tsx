@@ -79,7 +79,7 @@ export default function Card({ suit, rank, face }: Props) {
                   {range(12).map((col) => (
                     <div
                       key={col}
-                      className="w-3 h-3 border border-[0.5px] border-white"
+                      className="w-3 h-3 border-[0.5px] border-white"
                     />
                   ))}
                 </div>

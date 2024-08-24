@@ -1,5 +1,7 @@
 # React solitaire
 
+A Quick POC project that I made while having common cold
+
 ## Specs
 
 This project follows Solitaire rules specified at Bicycles [website](https://bicyclecards.com/how-to-play/solitaire)

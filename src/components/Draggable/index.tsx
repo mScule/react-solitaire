@@ -10,9 +10,19 @@ import Point2D from "../../types/Point2D";
 type Props = {
   data: DraggableData;
   children: ReactNode;
+  ghost?: ReactNode;
+
+  onStart?: () => void;
+  onEnd?: () => void;
 };
 
-export default function Draggable({ data, children }: Props) {
+export default function Draggable({
+  data,
+  children,
+  ghost,
+  onStart,
+  onEnd,
+}: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState<Nullable<Point2D>>(null);
 
@@ -23,6 +33,10 @@ export default function Draggable({ data, children }: Props) {
   const handleDragStartCapture = (e: DragEvent) => {
     hideDragEventGhostImage(e);
     transferDataAsJson(e);
+
+    if (onStart) {
+      onStart();
+    }
   };
 
   const handleDragCapture = (e: DragEvent) => {
@@ -34,11 +48,17 @@ export default function Draggable({ data, children }: Props) {
 
   const handleDragEnd = () => {
     setPosition(null);
+
+    if (onEnd) {
+      onEnd();
+    }
   };
 
   return (
     <>
+      {/* Actual element */}
       <div
+        ref={ref}
         draggable="true"
         className={clsx(
           "relative cursor-grab active:cursor-grabbing",
@@ -51,16 +71,16 @@ export default function Draggable({ data, children }: Props) {
         {children}
       </div>
 
+      {/* Ghost */}
       {position && (
         <div
-          ref={ref}
           className="fixed cursor-grabbing z-10 pointer-events-none"
           style={{
             top: position.y - (ref.current?.clientHeight ?? 0) / 2,
             left: position.x - (ref.current?.clientWidth ?? 0) / 2,
           }}
         >
-          {children}
+          {ghost ?? children}
         </div>
       )}
     </>

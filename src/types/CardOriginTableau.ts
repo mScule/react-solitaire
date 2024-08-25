@@ -1,7 +1,7 @@
+import TableauCardLocation from "./CardLocation";
+
 type CardOriginTableau = {
   location: "tableau";
-  pileIndex: number;
-  cardIndex: number;
-};
+} & TableauCardLocation;
 
 export default CardOriginTableau;

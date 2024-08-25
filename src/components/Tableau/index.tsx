@@ -2,7 +2,7 @@ import useAppSelector from "../../hooks/useAppSelector";
 import Card from "../Card";
 import Draggable from "../Draggable";
 import isLastIndexOf from "../../functions/isLastIndexOf";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import DraggableDropZone from "../DraggableDropZone";
 import DraggableData from "../../types/DraggableData";
 import useAppDispatch from "../../hooks/useAppDispatch";
@@ -11,10 +11,16 @@ import CardSlot from "../CardSlot";
 import CardOrigin from "../../types/CardOrigin";
 import CardOriginTableau from "../../types/CardOriginTableau";
 import isEmpty from "../../functions/isEmpty";
+import Nullable from "../../types/Nullable";
+import TableauCardLocation from "../../types/CardLocation";
+import clsx from "clsx";
 
 export default function Tableau() {
   const dispatch = useAppDispatch();
   const tableau = useAppSelector((state) => state.game.tableau);
+
+  const [hideCardsFrom, setHideCardsFrom] =
+    useState<Nullable<TableauCardLocation>>(null);
 
   const handleDrop = (targetPileIndex: number, data: DraggableData) => {
     const origin = data as CardOrigin;
@@ -70,19 +76,53 @@ export default function Tableau() {
               };
 
               return isLastIndexOf(pile.up, cardIndex) ? (
-                <Draggable key={`${rank}-${suit}-up`} data={data}>
-                  <DraggableDropZone
-                    onDrop={(data) => handleDrop(pileIndex, data)}
+                <div
+                  key={`${rank}-${suit}-up`}
+                  className={clsx(
+                    hideCardsFrom &&
+                      hideCardsFrom.pileIndex === pileIndex &&
+                      hideCardsFrom.cardIndex < cardIndex &&
+                      "opacity-0"
+                  )}
+                >
+                  <Draggable data={data}>
+                    <DraggableDropZone
+                      onDrop={(data) => handleDrop(pileIndex, data)}
+                    >
+                      <Card rank={rank} suit={suit} face="up" />
+                    </DraggableDropZone>
+                    <div className="-my-14" />
+                  </Draggable>
+                </div>
+              ) : (
+                <div
+                  key={`${rank}-${suit}-up`}
+                  className={clsx(
+                    hideCardsFrom &&
+                      hideCardsFrom.pileIndex === pileIndex &&
+                      hideCardsFrom.cardIndex < cardIndex &&
+                      "opacity-0"
+                  )}
+                >
+                  <Draggable
+                    data={data}
+                    ghost={
+                      <>
+                        {pile.up.slice(cardIndex).map(({ rank, suit }) => (
+                          <Fragment key={`${rank}-${suit}`}>
+                            <Card rank={rank} suit={suit} face="up" />
+                            <div className="-my-14" />
+                          </Fragment>
+                        ))}
+                      </>
+                    }
+                    onStart={() => setHideCardsFrom({ pileIndex, cardIndex })}
+                    onEnd={() => setHideCardsFrom(null)}
                   >
                     <Card rank={rank} suit={suit} face="up" />
-                  </DraggableDropZone>
-                  <div className="-my-14" />
-                </Draggable>
-              ) : (
-                <Draggable key={`${rank}-${suit}-up`} data={data}>
-                  <Card rank={rank} suit={suit} face="up" />
-                  <div className="-my-14" />
-                </Draggable>
+                    <div className="-my-14" />
+                  </Draggable>
+                </div>
               );
             })}
           </div>

@@ -1,4 +1,4 @@
-# React solitaire 
+# ⚛️ React solitaire ♠️♥️♣️
 
 ![Screenshot](./doc/img/screenshot.png)
 

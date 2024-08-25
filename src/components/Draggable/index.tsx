@@ -1,4 +1,4 @@
-import { ReactNode, DragEvent, useState } from "react";
+import { ReactNode, DragEvent, useState, useRef } from "react";
 import clsx from "clsx";
 
 import hideDragEventGhostImage from "../../functions/hideDragEventGhostImage";
@@ -13,19 +13,28 @@ type Props = {
 };
 
 export default function Draggable({ data, children }: Props) {
+  const ref = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState<Nullable<Point2D>>(null);
 
   const transferDataAsJson = (e: DragEvent) => {
     e.dataTransfer.setData("json", JSON.stringify(data));
-  }
+  };
 
   const handleDragStartCapture = (e: DragEvent) => {
     hideDragEventGhostImage(e);
     transferDataAsJson(e);
-  }
-  const handleDragCapture = (e: DragEvent) =>
-    setPosition({ x: e.clientX, y: e.clientY });
-  const handleDragEnd = () => setPosition(null);
+  };
+
+  const handleDragCapture = (e: DragEvent) => {
+    setPosition({
+      x: e.clientX,
+      y: e.clientY,
+    });
+  };
+
+  const handleDragEnd = () => {
+    setPosition(null);
+  };
 
   return (
     <>
@@ -44,8 +53,12 @@ export default function Draggable({ data, children }: Props) {
 
       {position && (
         <div
+          ref={ref}
           className="fixed cursor-grabbing z-10 pointer-events-none"
-          style={{ top: position.y, left: position.x }}
+          style={{
+            top: position.y - (ref.current?.clientHeight ?? 0) / 2,
+            left: position.x - (ref.current?.clientWidth ?? 0) / 2,
+          }}
         >
           {children}
         </div>

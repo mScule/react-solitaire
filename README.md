@@ -1,6 +1,8 @@
 # React solitaire
 
-A Quick POC project that I made
+A Quick POC project. You can try it [here](https://mscule.github.io/react-solitaire/).
+
+**Works only on PC**
 
 ## Specs
 

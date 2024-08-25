@@ -1,8 +1,10 @@
 # React solitaire 
 
-A Quick POC project
-
 ![Screenshot](./doc/img/screenshot.png)
+
+A Quick POC project. You can try it [here](https://mscule.github.io/react-solitaire/).
+
+**Works only on PC**
 
 ## Specs
 

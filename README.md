@@ -1,6 +1,8 @@
-# React solitaire
+# React solitaire 
 
-A Quick POC project that I made
+A Quick POC project
+
+![Screenshot](./doc/img/screenshot.png)
 
 ## Specs
 
